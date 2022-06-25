@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 
 public class DepthSearcher {
-    private HashMap<WayPoints, Color> pointsColorMap = new HashMap();
+    private HashMap<WayPoints, PointColor> pointsColorMap = new HashMap();
     private IGraphLine[] iGraphLines = new IGraphLine[]{};
     public DepthSearcher(IGraphLine[] iGraphLines) {
         this.iGraphLines = iGraphLines;
@@ -18,31 +18,30 @@ public class DepthSearcher {
         if (isFinished) {
             return distans;
         } else {
-            List<WayPoints> tmpList = getWhiteWayPoints(current);
-
-            for (WayPoints point:tmpList) {
+            List<WayPoints> ClosesWhitePoints = getWhiteWayPoints(current);
+            paintPointBlack(current);
+            for (WayPoints point:ClosesWhitePoints) {
                 int increaedDistance = distans + getDistans(current,point);
                 return DepthSearch(point, finish, increaedDistance);
             }
         }
         return distans;
     }
-    private List<WayPoints> getWayPoints(WayPoints current){
+    protected List<WayPoints> getWayPoints(WayPoints current){
         List<WayPoints> result = new ArrayList();
         for (IGraphLine iGraphLine: iGraphLines) {
             boolean isPointEx1 = iGraphLine.point1==current;
             boolean isPointEx2 = iGraphLine.point2==current;
-            if (isPointEx1){result.add(iGraphLine.point1);}
-            if (isPointEx2){result.add(iGraphLine.point2);}
+            if (isPointEx1){result.add(iGraphLine.point2);}
+            if (isPointEx2){result.add(iGraphLine.point1);}
         }
         return result;
     }
-     protected List<WayPoints> getWhiteWayPoints(WayPoints current){
+    protected List<WayPoints> getWhiteWayPoints(WayPoints current) {
         List<WayPoints> result = getWayPoints(current);
-        result.stream().filter(point -> pointsColorMap.get(point).equals(Color.WHITE)).toList();
-        return result;
+        return result.stream().filter(point -> pointsColorMap.get(point).equals(PointColor.WHITE)).toList();
     }
-    int getDistans(WayPoints a, WayPoints b){
+    protected int getDistans(WayPoints a, WayPoints b){
         for (IGraphLine iGraphLine: iGraphLines) {
             boolean isPointEx1 = (iGraphLine.point1==a)||(iGraphLine.point1==b);
             boolean isPointEx2 = (iGraphLine.point2==a)||(iGraphLine.point2==b);
@@ -51,9 +50,12 @@ public class DepthSearcher {
         }
         return 0;
     }
-    public void populeitPointsColor() {
+    protected void populeitPointsColor() {
         for (WayPoints point : WayPoints.values()) {
-            pointsColorMap.put(point, Color.WHITE);
+            pointsColorMap.put(point, PointColor.WHITE);
         }
+    }
+    protected void paintPointBlack(WayPoints point){
+        pointsColorMap.put(point, PointColor.BLACK);
     }
 }
