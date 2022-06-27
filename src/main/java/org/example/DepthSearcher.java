@@ -17,23 +17,29 @@ public class DepthSearcher {
         this.pointsColorMap =pointsColorMap;
     }
 
-    public int DepthSearch(WayPoints current, WayPoints finish, int distans){
+    public Integer DepthSearch(WayPoints current, WayPoints finish, Integer distans){
         boolean isFinished = current.equals(finish);
-        if(current.equals(WayPoints.B2)){
-            System.out.println("");
-        }
+        boolean wayNotExists = getWhiteWayPoints(current).size()==0;
         if (isFinished) {
+            System.out.print(current+" -> ");
             return distans;
-        } else {
+        } else if (wayNotExists){
+            System.out.println(current + " -> No way");
+            return null;
+        }else {
             List<WayPoints> ClosesWhitePoints = getWhiteWayPoints(current);
             paintPointBlack(current);
+            System.out.print(current+" -> ");
             for (WayPoints point:ClosesWhitePoints) {
-                DepthSearcher depthSearcher = new DepthSearcher(iGraphLines,pointsColorMap);
-                int incresedDistance = distans + getDistans(current,point);
-                return depthSearcher.DepthSearch(point, finish, incresedDistance);
+                HashMap<WayPoints, PointColor> pointsColorMap2 = new HashMap(pointsColorMap);
+                DepthSearcher depthSearcher = new DepthSearcher(iGraphLines,pointsColorMap2);
+                if (distans != null) {
+                    int incresedDistance = distans + getDistans(current, point);
+                    return depthSearcher.DepthSearch(point, finish, incresedDistance);
+                }
             }
+            return null;
         }
-        return distans;
     }
     protected List<WayPoints> getWayPoints(WayPoints current){
         List<WayPoints> result = new ArrayList();
