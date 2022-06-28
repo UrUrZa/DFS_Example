@@ -4,7 +4,6 @@ import java.awt.*;
 import java.util.HashMap;
 
 public class Main {
-        public static HashMap<WayPoints, Color> pointsColorMap = new HashMap();
         public static void main(String[] args) {
             SearchResultPool searchResults = new SearchResultPool();
                try {
