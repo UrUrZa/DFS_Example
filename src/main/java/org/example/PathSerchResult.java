@@ -11,4 +11,11 @@ public class PathSerchResult {
         Path = path;
         this.distansPath = distansPath;
     }
+    @Override
+    public String toString(){
+        String result = "";
+        for (WayPoints point: Path) {
+            result = result + point.toString() + " -> ";
+        } return result + " distans = " + distansPath;
+    }
 }

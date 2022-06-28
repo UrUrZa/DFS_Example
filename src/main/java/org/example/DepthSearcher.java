@@ -1,7 +1,5 @@
 package org.example;
 
-import java.awt.*;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -10,38 +8,36 @@ public class DepthSearcher {
     private HashMap<WayPoints, PointColor> pointsColorMap = new HashMap();
     private IGraphLine[] iGraphLines = new IGraphLine[]{};
     private List<WayPoints> currentWay = new ArrayList<>();
-    private List<PathSerchResult> serchResults;
-    public DepthSearcher(IGraphLine[] iGraphLines, List<PathSerchResult> serchResults) {
+    private SearchResultPool searchResults;
+    public DepthSearcher(IGraphLine[] iGraphLines, SearchResultPool searchResults) {
         this.iGraphLines = iGraphLines;
-        this.serchResults = serchResults;
+        this.searchResults = searchResults;
         populeitPointsColor();
     }
-    protected DepthSearcher(IGraphLine[] iGraphLines, HashMap<WayPoints, PointColor> pointsColorMap, List<WayPoints> currentWay, List<PathSerchResult> serchResults) {
+    protected DepthSearcher(IGraphLine[] iGraphLines, HashMap<WayPoints, PointColor> pointsColorMap, List<WayPoints> currentWay, SearchResultPool searchResults) {
         this.iGraphLines = iGraphLines;
         this.pointsColorMap =pointsColorMap;
         this.currentWay = currentWay;
-        this.serchResults = serchResults;
+        this.searchResults = searchResults;
     }
 
     public void DepthSearch(WayPoints current, WayPoints finish, Integer distans){
         boolean isFinished = current.equals(finish);
         boolean wayNotExists = getWhiteWayPoints(current).size()==0;
         if (isFinished) {
-            serchResults.add(new PathSerchResult(currentWay, distans));
-            System.out.print(current+" -> ");
-            //return distans;
+            searchResults.add(new PathSerchResult(currentWay, distans));
+
         } else if (wayNotExists){
-            System.out.println(currentWay.toString() + " -> No way");
-           // return null;
+
         } else {
             List<WayPoints> ClosesWhitePoints = getWhiteWayPoints(current);
             paintPointBlack(current);
             addCurrentToPointCurrentWay(current);
-            System.out.print(currentWay.toString()+" -> ");
+
             for (WayPoints point:ClosesWhitePoints) {
                 HashMap<WayPoints, PointColor> pointsColorMap2 = new HashMap(pointsColorMap);
                 ArrayList<WayPoints>mayCurrentWay= new ArrayList<>(currentWay);
-                DepthSearcher depthSearcher = new DepthSearcher(iGraphLines, pointsColorMap2, mayCurrentWay, serchResults);
+                DepthSearcher depthSearcher = new DepthSearcher(iGraphLines, pointsColorMap2, mayCurrentWay, searchResults);
                 if (distans != null) {
                     int incresedDistance = distans + getDistans(current, point);
                     depthSearcher.DepthSearch(point, finish, incresedDistance);

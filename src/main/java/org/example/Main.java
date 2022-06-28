@@ -1,18 +1,16 @@
 package org.example;
 
 import java.awt.*;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 public class Main {
         public static HashMap<WayPoints, Color> pointsColorMap = new HashMap();
         public static void main(String[] args) {
-            ArrayList serhResult = new ArrayList<PathSerchResult>();
+            SearchResultPool searchResults = new SearchResultPool();
                try {
-                       DepthSearcher depthSearcher = new DepthSearcher(iGraphLines, serhResult);
+                       DepthSearcher depthSearcher = new DepthSearcher(iGraphLines, searchResults);
                        depthSearcher.DepthSearch(WayPoints.A,WayPoints.J,0);
-                       System.out.println(serhResult.toString());
+                       System.out.println(searchResults.getShortestPath().toString());
                 } catch (Exception e){
                         e.printStackTrace();
                 }
