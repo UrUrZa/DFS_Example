@@ -8,10 +8,11 @@ import java.util.List;
 public class Main {
         public static HashMap<WayPoints, Color> pointsColorMap = new HashMap();
         public static void main(String[] args) {
+            ArrayList serhResult = new ArrayList<PathSerchResult>();
                try {
-                       DepthSearcher depthSearcher = new DepthSearcher(iGraphLines);
-                       int result = depthSearcher.DepthSearch(WayPoints.A,WayPoints.J,0);
-                       System.out.println(result);
+                       DepthSearcher depthSearcher = new DepthSearcher(iGraphLines, serhResult);
+                       depthSearcher.DepthSearch(WayPoints.A,WayPoints.J,0);
+                       System.out.println(serhResult.toString());
                 } catch (Exception e){
                         e.printStackTrace();
                 }
